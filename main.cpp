@@ -41,6 +41,7 @@ int GetCorrectValue();
 void FixStreamState();
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion);
 void Sorted(vector<product>& products);
+void GetCorrectName(string name, string object);
 
 //МЕНЮ
 void PrintMenu();
@@ -103,37 +104,32 @@ int GetCorrectValue() {
 product Add(vector<product>& Product) {
     product product;
     
-    cout << "Enter the name of the enterprise: ";
     cin.ignore();
-    getline(cin, product.company);
+    GetCorrectName(product.company, "name of the enterprise");
     
-    cout << "Enter the name of the workshop: ";
-    getline(cin, product.workshop);
+
+    GetCorrectName(product.workshop, "name of the workshop");
     
-    cout << "Enter the name of the product: ";
-    getline(cin, product.productName);
+
+    GetCorrectName(product.productName, "name of the product");
     
     cout << "Enter the number of units in the batch: ";
-    cin >> product.productCount;
-    FixStreamState();
+    product.productCount = GetCorrectValue();
     
     cout << "Enter the day of product release: ";
     cin >> product.date.day;
-    FixStreamState();
+    product.date.day = GetCorrectValue();
     
     cout << "Enter the month of product release: ";
-    cin >> product.date.month;
-    FixStreamState();
-    
+    product.date.month = GetCorrectValue();
+
     cout << "Enter the year of product release: ";
-    cin >> product.date.year;
-    FixStreamState();
+    product.date.year = GetCorrectValue();
+
+    GetCorrectName(product.districtOfCompany, "district where the enterprise is located");
     
-    cout << "Enter the district where the enterprise is located: ";
-    getline(cin, product.districtOfCompany);
-    
-    cout << "Enter the surname of the workshop chief: ";
-    getline(cin, product.chiefSurname);
+
+    GetCorrectName(product.chiefSurname, "surname of the workshop chief");
     
     product.number = Product.size() + 1;
     return product;
@@ -232,4 +228,33 @@ void Sorted(vector<product>& products) {
         cout << "Sort complete!" << endl;
 
     } while (sortCommand);
+}
+
+
+void GetCorrectName(string name, string object){
+    bool isNotOk{};
+    string temp;
+
+    do{
+        isNotOk = false;
+        cout << "Enter the " << object << ": ";
+        cin >> temp;
+
+        for (int i = 0; temp[i] != '\0'; i++){
+            if (temp.length() > 20){
+                temp[20] = '\0';
+            }
+            name = temp;
+        }
+
+        for (int i = 0; name[i] != '\0'; i++) {
+            if ((name[i] >= ' ' && name[i] <= '@') || (name[i] >= '[' && name[i] < 'a') 
+            || (name[i] >= '{' && name[i] <= '~')){
+                cout << "The name must contain only letters!" << endl;
+                isNotOk = true;
+                break;
+            }
+        }
+    }
+    while(isNotOk);
 }
