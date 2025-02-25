@@ -42,6 +42,7 @@ void FixStreamState();
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion);
 void Sorted(vector<product>& products);
 void GetCorrectName(string name, string object);
+int getCorrectInputNumber(int begin, int end);
 
 //МЕНЮ
 void PrintMenu();
@@ -84,6 +85,23 @@ void FixStreamState() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+int getCorrectInputNumber(int begin, int end){
+    int n{};
+    bool isNotOk{};
+    do{
+        isNotOk = false;
+        if(((cin >> n).fail()) || (n < begin || n > end)){
+            FixStreamState();
+            cout << "Incorrect input! Try again." << endl;
+            isNotOk = true;  
+        }
+    }
+    while (isNotOk);
+
+    return n;
+}
+
+
 int GetCorrectValue() {
     int n{};
     bool isNotOk{};
@@ -118,13 +136,13 @@ product Add(vector<product>& Product) {
     
     cout << "Enter the day of product release: ";
     cin >> product.date.day;
-    product.date.day = GetCorrectValue();
+    product.date.day = getCorrectInputNumber(1, 31);
     
     cout << "Enter the month of product release: ";
-    product.date.month = GetCorrectValue();
+    product.date.month = getCorrectInputNumber(1, 12);
 
     cout << "Enter the year of product release: ";
-    product.date.year = GetCorrectValue();
+    product.date.year = getCorrectInputNumber(1970, 2025);
 
     GetCorrectName(product.districtOfCompany, "district where the enterprise is located");
     
