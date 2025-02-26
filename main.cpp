@@ -92,7 +92,8 @@ int getCorrectInputNumber(int begin, int end){
         isNotOk = false;
         if(((cin >> n).fail()) || (n < begin || n > end)){
             FixStreamState();
-            cout << "Incorrect input! The number must be between " << endl;
+            cout << "Incorrect input! The number must be between " << begin << " and " << end << "!"<< endl;
+            cout << "Try again!" << endl;
             isNotOk = true;  
         }
     }
@@ -135,7 +136,6 @@ product Add(vector<product>& Product) {
     product.productCount = GetCorrectValue();
     
     cout << "Enter the day of product release: ";
-    cin >> product.date.day;
     product.date.day = getCorrectInputNumber(1, 31);
     
     cout << "Enter the month of product release: ";
