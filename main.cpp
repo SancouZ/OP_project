@@ -92,7 +92,7 @@ int getCorrectInputNumber(int begin, int end){
         isNotOk = false;
         if(((cin >> n).fail()) || (n < begin || n > end)){
             FixStreamState();
-            cout << "Incorrect input! Try again." << endl;
+            cout << "Incorrect input! The number must be between " << endl;
             isNotOk = true;  
         }
     }
@@ -200,9 +200,14 @@ void SortMenu() {
     cout << "8 - Sort by chief surname" << endl;
     cout << "0 - Exit" << endl;
 }
+void SortCriterionMenu() {
+    cout << "1 - Sort in ascending order" << endl;
+    cout << "2 - Sort in descending order" << endl;
+}
 //Функция сортировки
 void Sorted(vector<product>& products) {
     int sortCommand{};
+
     do {
         SortMenu();
         sortCommand = GetCorrectValue();
@@ -239,16 +244,26 @@ void Sorted(vector<product>& products) {
                 cout << "Undefined command" << endl;
                 continue;
         }
-        sort(products.begin(), products.end(), [criterion](const product &a, const product &b) {
-            return SortByCriterion(a, b, criterion);
-        });
-
+        SortCriterionMenu();
+        int sortCriterionCommand = GetCorrectValue();
+        switch (sortCriterionCommand) {
+            case 1:
+                sort(products.begin(), products.end(), [criterion](const product &a, const product &b) {
+                    return SortByCriterion(a, b, criterion);
+                });
+                break;
+            case 2:
+                sort(products.begin(), products.end(), [criterion](const product &a, const product &b) {
+                    return !SortByCriterion(a, b, criterion);
+                });
+                break;
+        }
         cout << "Sort complete!" << endl;
 
     } while (sortCommand);
 }
 
-
+//Проверка строк
 void GetCorrectName(string name, string object){
     bool isNotOk{};
     string temp;
