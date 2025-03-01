@@ -35,13 +35,13 @@ enum SortCriterion {
     BY_CHIEF_SURNAME,
 };
 
-
 product Add(vector<product>& Product);
 int GetCorrectValue();
 void FixStreamState();
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion);
-void Sorted(vector<product>& products);
-void GetCorrectName(string name, string object);
+void SortVector(vector<product>& products);
+void TypeOfSort(vector<product>& products, SortCriterion criterion);
+void GetCorrectName(string &name, string object);
 int getCorrectInputNumber(int begin, int end);
 
 //МЕНЮ
@@ -65,7 +65,7 @@ int main() {
                 }
                 break;
             case 3:
-                Sorted(products);
+                SortVector(products);
                 break;
             case 4:
                 break;
@@ -205,9 +205,8 @@ void SortCriterionMenu() {
     cout << "2 - Sort in descending order" << endl;
 }
 //Функция сортировки
-void Sorted(vector<product>& products) {
+void SortVector(vector<product>& products) {
     int sortCommand{};
-
     do {
         SortMenu();
         sortCommand = GetCorrectValue();
@@ -241,53 +240,63 @@ void Sorted(vector<product>& products) {
             case 0:
                 return;
             default:
-                cout << "Undefined command" << endl;
-                continue;
+                cout << "Undefined command, it must be 1, 2, 3, 4, 5, 6, 7 or 8, try again!" << endl;
         }
+
+        TypeOfSort(products, criterion);
+        cout << "Sort complete!" << endl;
+    } while (sortCommand);
+}
+
+//Выбор вида сортировки
+void TypeOfSort(vector<product>& products, SortCriterion criterion) {
+    int sortCriterionCommand;
+    do {
         SortCriterionMenu();
-        int sortCriterionCommand = GetCorrectValue();
+        sortCriterionCommand = GetCorrectValue();
         switch (sortCriterionCommand) {
             case 1:
                 sort(products.begin(), products.end(), [criterion](const product &a, const product &b) {
                     return SortByCriterion(a, b, criterion);
                 });
-                break;
+                return ;
             case 2:
                 sort(products.begin(), products.end(), [criterion](const product &a, const product &b) {
                     return !SortByCriterion(a, b, criterion);
                 });
-                break;
+                return ;
+            default:
+                cout << "Undefined command, it must be 1 or 2, try again!" << endl;
         }
-        cout << "Sort complete!" << endl;
-
-    } while (sortCommand);
+    } while (sortCriterionCommand);
 }
 
 //Проверка строк
-void GetCorrectName(string name, string object){
+void GetCorrectName(string &name, string object) {
     bool isNotOk{};
     string temp;
 
-    do{
+    do {
         isNotOk = false;
         cout << "Enter the " << object << ": ";
         cin >> temp;
 
-        for (int i = 0; temp[i] != '\0'; i++){
-            if (temp.length() > 20){
-                temp[20] = '\0';
-            }
-            name = temp;
+        if (temp.length() > 20) {
+            cout << "The name must be at most 20 characters long!" << endl;
+            isNotOk = true;
+            continue;
         }
 
-        for (int i = 0; name[i] != '\0'; i++) {
-            if ((name[i] >= ' ' && name[i] <= '@') || (name[i] >= '[' && name[i] < 'a') 
-            || (name[i] >= '{' && name[i] <= '~')){
+        for (char c : temp) {
+            if (!isalpha(c)) {
                 cout << "The name must contain only letters!" << endl;
                 isNotOk = true;
                 break;
             }
         }
-    }
-    while(isNotOk);
+
+        if (!isNotOk) {
+            name = temp;
+        }
+    } while (isNotOk);
 }
