@@ -287,8 +287,9 @@ void GetCorrectName(string &name, string object) {
             continue;
         }
 
-        for (char c : temp) {
-            if (!isalpha(c)) {
+        for (int i = 0; temp[i] != '\0'; i++) {
+            if ((temp[i] >= ' ' && temp[i] <= '@') || (temp[i] >= '[' && temp[i] < 'a') || 
+                (temp[i] >= '{' && temp[i] <= '~')){
                 cout << "The name must contain only letters!" << endl;
                 isNotOk = true;
                 break;
