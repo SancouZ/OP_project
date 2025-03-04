@@ -135,14 +135,14 @@ size_t utf8_length(const string& str) {
         } else if ((c & 0xF8) == 0xF0) {
             i += 4;
         } else {
-            i += 1; // �������� ����, ������ ��������
+            i += 1;
         }
         length++;
     }
     return length;
 }
 
-// ������� ��� ������������ ������ �� �������� ������
+// Пробелы
 void printAligned(const string& str, size_t width) {
     size_t len = utf8_length(str);
     cout << str;
@@ -153,7 +153,7 @@ void printAligned(const string& str, size_t width) {
 
 
 
-//�������
+//Вывод таблицы
 void PrintTable(const vector<product>& products) {
     if (products.empty()) {
         cout << "Нет компаний для отображения. Таблица пуста." << endl;
