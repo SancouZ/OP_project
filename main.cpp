@@ -51,7 +51,7 @@ void Edit(vector<product>& products);
 void Delete(vector<product>& products);
 
 
-//МЕНЮ
+//РњР•РќР®
 void PrintMenu();
 void SortMenu();
 void SortCriterionMenu();
@@ -130,7 +130,7 @@ size_t utf8_length(const string& str) {
     return length;
 }
 
-// Пробелы
+// РџСЂРѕР±РµР»С‹
 void printAligned(const string& str, size_t width) {
     size_t len = utf8_length(str);
     cout << str;
@@ -141,15 +141,15 @@ void printAligned(const string& str, size_t width) {
 
 
 
-//Вывод таблицы
+//Р’С‹РІРѕРґ С‚Р°Р±Р»РёС†С‹
 void PrintTable(const vector<product>& products) {
     if (products.empty()) {
-        cout << "Нет данных для отображения. Таблица пуста." << endl;
+        cout << "РќРµС‚ РґР°РЅРЅС‹С… РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ. РўР°Р±Р»РёС†Р° РїСѓСЃС‚Р°." << endl;
         return;
     }
 
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
-    cout << "| № |     Компания      |      Мастерская     |   Название продукта     | Кол-во | Дата выпуска  |      Район     | Фамилия начальника |\n";
+    cout << "| в„– |     РљРѕРјРїР°РЅРёСЏ      |      РњР°СЃС‚РµСЂСЃРєР°СЏ     |   РќР°Р·РІР°РЅРёРµ РїСЂРѕРґСѓРєС‚Р°     | РљРѕР»-РІРѕ | Р”Р°С‚Р° РІС‹РїСѓСЃРєР°  |      Р Р°Р№РѕРЅ     | Р¤Р°РјРёР»РёСЏ РЅР°С‡Р°Р»СЊРЅРёРєР° |\n";
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
 
     for (const auto& prod : products) {
@@ -174,7 +174,7 @@ void PrintTable(const vector<product>& products) {
 }
 
 
-// Ввод данных
+// Р’РІРѕРґ РґР°РЅРЅС‹С…
 product Add(vector<product>& Product) {
     product product;
     
@@ -208,7 +208,7 @@ product Add(vector<product>& Product) {
     return product;
 }
 
-// Критерий соортировки
+// РљСЂРёС‚РµСЂРёР№ СЃРѕРѕСЂС‚РёСЂРѕРІРєРё
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion) {
     switch (criterion) {
         case BY_NUMBER:
@@ -236,7 +236,7 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
     }
 }
 
-// Основное меню
+// РћСЃРЅРѕРІРЅРѕРµ РјРµРЅСЋ
 void PrintMenu() {
     cout << "1 - Add product" << endl;
     cout << "2 - Show table" << endl;
@@ -245,7 +245,7 @@ void PrintMenu() {
     cout << "5 - Delete data" << endl;
 }
 
-//Меню сортировки
+//РњРµРЅСЋ СЃРѕСЂС‚РёСЂРѕРІРєРё
 void SortMenu() {
     cout << "1 - Sort by number" << endl;
     cout << "2 - Sort by company" << endl;
@@ -258,14 +258,14 @@ void SortMenu() {
     cout << "0 - Back" << endl;
 }
 
-// Меню вида сортировки
+// РњРµРЅСЋ РІРёРґР° СЃРѕСЂС‚РёСЂРѕРІРєРё
 void SortCriterionMenu() {
     cout << "1 - Sort in ascending order" << endl;
     cout << "2 - Sort in descending order" << endl;
     cout << "0 - Back" << endl;
 }
 
-//Функция сортировки
+//Р¤СѓРЅРєС†РёСЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
 void SortVector(vector<product>& products) {
     int sortCommand{};
     do {
@@ -309,7 +309,7 @@ void SortVector(vector<product>& products) {
     } while (sortCommand);
 }
 
-//Выбор вида сортировки
+//Р’С‹Р±РѕСЂ РІРёРґР° СЃРѕСЂС‚РёСЂРѕРІРєРё
 void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     int sortCriterionCommand;
     do {
@@ -332,7 +332,7 @@ void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     } while (sortCriterionCommand);
 }
 
-//Проверка строк
+//РџСЂРѕРІРµСЂРєР° СЃС‚СЂРѕРє
 void GetCorrectName(string &name, string object) {
     bool isNotOk{};
     string temp;
@@ -380,7 +380,7 @@ int getCorrectInputNumber(int begin, int end){
     return n;
 }
 
-//Редактирование
+//Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ
 void Edit(vector<product>& products) {
     if(!products.empty()){
         string chiefSurname;
@@ -397,7 +397,7 @@ void Edit(vector<product>& products) {
     }
 }
 
-//Удаление
+//РЈРґР°Р»РµРЅРёРµ
 void Delete(vector<product>& products) {
     if (!products.empty()) {
         PrintTable(products);
