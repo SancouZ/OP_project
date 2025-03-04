@@ -47,11 +47,15 @@ void SortVector(vector<product>& products);
 void TypeOfSort(vector<product>& products, SortCriterion criterion);
 void GetCorrectName(string &name, string object);
 int getCorrectInputNumber(int begin, int end);
+void Edit(vector<product>& products);
+void Delete(vector<product>& products);
 
 
-//РњР•РќР®
+//МЕНЮ
 void PrintMenu();
 void SortMenu();
+void SortCriterionMenu();
+
 int main() {
     setlocale(LC_ALL, "Russian");
     int command{};
@@ -70,8 +74,10 @@ int main() {
                 SortVector(products);
                 break;
             case 4:
+                Edit(products);
                 break;
             case 5:
+                Delete(products);
                 break;
             case 0:
                 cout << "The program is over" << endl; break;
@@ -86,24 +92,6 @@ void FixStreamState() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
-
-int getCorrectInputNumber(int begin, int end){
-    int n{};
-    bool isNotOk{};
-    do{
-        isNotOk = false;
-        if(((cin >> n).fail()) || (n < begin || n > end)){
-            FixStreamState();
-            cout << "Incorrect input! The number must be between " << begin << " and " << end << "!"<< endl;
-            cout << "Try again!" << endl;
-            isNotOk = true;  
-        }
-    }
-    while (isNotOk);
-
-    return n;
-}
-
 
 int GetCorrectValue() {
     int n{};
@@ -142,7 +130,7 @@ size_t utf8_length(const string& str) {
     return length;
 }
 
-// РџСЂРѕР±РµР»С‹
+// Пробелы
 void printAligned(const string& str, size_t width) {
     size_t len = utf8_length(str);
     cout << str;
@@ -153,15 +141,15 @@ void printAligned(const string& str, size_t width) {
 
 
 
-//Р’С‹РІРѕРґ С‚Р°Р±Р»РёС†С‹
+//Вывод таблицы
 void PrintTable(const vector<product>& products) {
     if (products.empty()) {
-        cout << "РќРµС‚ РєРѕРјРїР°РЅРёР№ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ. РўР°Р±Р»РёС†Р° РїСѓСЃС‚Р°." << endl;
+        cout << "Нет данных для отображения. Таблица пуста." << endl;
         return;
     }
 
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
-    cout << "| в„– |     РљРѕРјРїР°РЅРёСЏ      |       РњР°СЃС‚РµСЂСЃРєР°СЏ    |       РќР°Р·РІР°РЅРёРµ РїСЂРѕРґСѓРєС‚Р° | РљРѕР»-РІРѕ | Р”Р°С‚Р° РІС‹РїСѓСЃРєР°  | Р Р°Р№РѕРЅ          | Р¤Р°РјРёР»РёСЏ РЅР°С‡Р°Р»СЊРЅРёРєР° |\n";
+    cout << "| № |     Компания      |      Мастерская     |   Название продукта     | Кол-во | Дата выпуска  |      Район     | Фамилия начальника |\n";
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
 
     for (const auto& prod : products) {
@@ -186,7 +174,7 @@ void PrintTable(const vector<product>& products) {
 }
 
 
-// Р’РІРѕРґ РґР°РЅРЅС‹С…
+// Ввод данных
 product Add(vector<product>& Product) {
     product product;
     
@@ -220,7 +208,7 @@ product Add(vector<product>& Product) {
     return product;
 }
 
-// РљСЂРёС‚РµСЂРёР№ СЃРѕРѕСЂС‚РёСЂРѕРІРєРё
+// Критерий соортировки
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion) {
     switch (criterion) {
         case BY_NUMBER:
@@ -248,14 +236,16 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
     }
 }
 
-// РћСЃРЅРѕРІРЅРѕРµ РјРµРЅСЋ
+// Основное меню
 void PrintMenu() {
     cout << "1 - Add product" << endl;
     cout << "2 - Show table" << endl;
     cout << "3 - Sort" << endl;
+    cout << "4 - Edit chief surname" << endl;
+    cout << "5 - Delete data" << endl;
 }
 
-//РњРµРЅСЋ СЃРѕСЂС‚РёСЂРѕРІРєРё
+//Меню сортировки
 void SortMenu() {
     cout << "1 - Sort by number" << endl;
     cout << "2 - Sort by company" << endl;
@@ -265,13 +255,17 @@ void SortMenu() {
     cout << "6 - Sort by date" << endl;
     cout << "7 - Sort by district" << endl;
     cout << "8 - Sort by chief surname" << endl;
-    cout << "0 - Exit" << endl;
+    cout << "0 - Back" << endl;
 }
+
+// Меню вида сортировки
 void SortCriterionMenu() {
     cout << "1 - Sort in ascending order" << endl;
     cout << "2 - Sort in descending order" << endl;
+    cout << "0 - Back" << endl;
 }
-//Р¤СѓРЅРєС†РёСЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
+
+//Функция сортировки
 void SortVector(vector<product>& products) {
     int sortCommand{};
     do {
@@ -315,7 +309,7 @@ void SortVector(vector<product>& products) {
     } while (sortCommand);
 }
 
-//Р’С‹Р±РѕСЂ РІРёРґР° СЃРѕСЂС‚РёСЂРѕРІРєРё
+//Выбор вида сортировки
 void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     int sortCriterionCommand;
     do {
@@ -338,7 +332,7 @@ void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     } while (sortCriterionCommand);
 }
 
-//РџСЂРѕРІРµСЂРєР° СЃС‚СЂРѕРє
+//Проверка строк
 void GetCorrectName(string &name, string object) {
     bool isNotOk{};
     string temp;
@@ -367,4 +361,58 @@ void GetCorrectName(string &name, string object) {
             name = temp;
         }
     } while (isNotOk);
+}
+
+int getCorrectInputNumber(int begin, int end){
+    int n{};
+    bool isNotOk{};
+    do{
+        isNotOk = false;
+        if(((cin >> n).fail()) || (n < begin || n > end)){
+            FixStreamState();
+            cout << "Incorrect input! The number must be between " << begin << " and " << end << "!"<< endl;
+            cout << "Try again!" << endl;
+            isNotOk = true;  
+        }
+    }
+    while (isNotOk);
+
+    return n;
+}
+
+//Редактирование
+void Edit(vector<product>& products) {
+    if(!products.empty()){
+        string chiefSurname;
+        PrintTable(products);
+        cout << "Enter the number to edit (1 to " << products.size() << "): " << endl;
+        int numberToEdit = getCorrectInputNumber(1, products.size());
+        GetCorrectName(products[numberToEdit - 1].chiefSurname, "Enter the new chief surname");
+        cout << "The data has been updated successfully" << endl;
+        return ;
+    }
+    else {
+        cout << "There is no data in the table!" << endl;
+        return ;
+    }
+}
+
+//Удаление
+void Delete(vector<product>& products) {
+    if (!products.empty()) {
+        PrintTable(products);
+        cout << "Enter the number to delete (1 to " << products.size() << "): " << endl;
+        int numberToDelete = getCorrectInputNumber(1, products.size());
+        products.erase(products.begin() + (numberToDelete - 1));
+
+        for (int i = numberToDelete - 1; i < products.size(); i++) {
+            products[i].number -= 1; 
+        }
+        cout << "Data has been successfully deleted" << endl;
+        return;
+
+    } else {
+        cout << "There is no data in the table!" << endl;
+        return;
+    }
 }
