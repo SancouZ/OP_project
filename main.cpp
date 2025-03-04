@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <limits>
@@ -28,21 +29,25 @@ enum SortCriterion {
     BY_NUMBER,
     BY_COMPANY,
     BY_WORKSHOP,
-    BY_PRODUCT_NAME,
-    BY_PRODUCT_COUNT,
+    BY_product_NAME,
+    BY_product_COUNT,
     BY_DATE,
     BY_DISTRICT,
     BY_CHIEF_SURNAME,
 };
 
-product Add(vector<product>& Product);
+product Add(vector<product>& product);
 int GetCorrectValue();
+size_t utf8_length(const string& str);
+void printAligned(const string& str, size_t width);
+void PrintTable(const vector<product>& products);
 void FixStreamState();
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion);
 void SortVector(vector<product>& products);
 void TypeOfSort(vector<product>& products, SortCriterion criterion);
 void GetCorrectName(string &name, string object);
 int getCorrectInputNumber(int begin, int end);
+
 
 //МЕНЮ
 void PrintMenu();
@@ -59,10 +64,7 @@ int main() {
                 products.push_back(Add(products));
                 break;
             case 2:
-                for (const auto& p : products) {
-                    cout << p.company << endl;
-
-                }
+                PrintTable(products);
                 break;
             case 3:
                 SortVector(products);
@@ -119,6 +121,71 @@ int GetCorrectValue() {
     return n;
 }
 
+
+size_t utf8_length(const string& str) {
+    size_t length = 0;
+    for (size_t i = 0; i < str.length();) {
+        unsigned char c = str[i];
+        if ((c & 0x80) == 0) {
+            i += 1;
+        } else if ((c & 0xE0) == 0xC0) {
+            i += 2;
+        } else if ((c & 0xF0) == 0xE0) {
+            i += 3;
+        } else if ((c & 0xF8) == 0xF0) {
+            i += 4;
+        } else {
+            i += 1; // �������� ����, ������ ��������
+        }
+        length++;
+    }
+    return length;
+}
+
+// ������� ��� ������������ ������ �� �������� ������
+void printAligned(const string& str, size_t width) {
+    size_t len = utf8_length(str);
+    cout << str;
+    for (size_t i = 0; i < width - len; i++) {
+        cout << ' ';
+    }
+}
+
+
+
+//�������
+void PrintTable(const vector<product>& products) {
+    if (products.empty()) {
+        cout << "Нет компаний для отображения. Таблица пуста." << endl;
+        return;
+    }
+
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
+    cout << "| № |     Компания      |       Мастерская    |       Название продукта | Кол-во | Дата выпуска  | Район          | Фамилия начальника |\n";
+    cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
+
+    for (const auto& prod : products) {
+        cout << "|" << left << setw(3) << prod.number << "|";
+        printAligned(prod.company, 19);
+        cout << "|";
+        printAligned(prod.workshop, 21);
+        cout << "|";
+        printAligned(prod.productName, 25);
+        cout << "|";
+        string temp;
+        temp = to_string(prod.productCount);
+        printAligned(temp, 8);
+        cout << "|" << setw(2) << prod.date.day << "." << setw(2) << prod.date.month << "."  << setw(4) << prod.date.year; 
+        cout << "     |";
+        printAligned(prod.districtOfCompany, 16);
+        cout << "|";
+        printAligned(prod.chiefSurname, 20);
+        cout << "|";
+        cout << "\n----------------------------------------------------------------------------------------------------------------------------------------\n";
+    }
+}
+
+
 // Ввод данных
 product Add(vector<product>& Product) {
     product product;
@@ -162,9 +229,9 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
             return a.company < b.company;
         case BY_WORKSHOP:
             return a.workshop < b.workshop;
-        case BY_PRODUCT_NAME:
+        case BY_product_NAME:
             return a.productName < b.productName;
-        case BY_PRODUCT_COUNT:
+        case BY_product_COUNT:
             return a.productCount < b.productCount;
         case BY_DATE:
             if (a.date.year != b.date.year)
@@ -223,10 +290,10 @@ void SortVector(vector<product>& products) {
                 criterion = BY_WORKSHOP;
                 break;
             case 4:
-                criterion = BY_PRODUCT_NAME;
+                criterion = BY_product_NAME;
                 break;
             case 5:
-                criterion = BY_PRODUCT_COUNT;
+                criterion = BY_product_COUNT;
                 break;
             case 6:
                 criterion = BY_DATE;
@@ -287,8 +354,9 @@ void GetCorrectName(string &name, string object) {
             continue;
         }
 
-        for (char c : temp) {
-            if (!isalpha(c)) {
+        for (int i = 0; temp[i] != '\0'; i++) {
+            if ((temp[i] >= ' ' && temp[i] <= '@') || (temp[i] >= '[' && temp[i] < 'a') || 
+                (temp[i] >= '{' && temp[i] <= '~')){
                 cout << "The name must contain only letters!" << endl;
                 isNotOk = true;
                 break;
