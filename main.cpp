@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <fstream>
 #include <vector>
 #include <limits>
 #include <algorithm>
@@ -49,9 +50,13 @@ void GetCorrectName(string &name, string object);
 int getCorrectInputNumber(int begin, int end);
 void Edit(vector<product>& products);
 void Delete(vector<product>& products);
+void readingDataFromTxt(vector<product>& products);
+void readingDataFromBin(vector<product>& products);
+void addToTxt(vector<product>& products);
+void addToBin(vector<product>& products);
 
 
-//РњР•РќР®
+//МЕНЮ
 void PrintMenu();
 void SortMenu();
 void SortCriterionMenu();
@@ -78,6 +83,18 @@ int main() {
                 break;
             case 5:
                 Delete(products);
+                break;
+            case 6:
+                readingDataFromTxt(products);
+                break;
+            case 7:
+                addToTxt(products);
+                break;
+            case 8:
+                
+                break;
+            case 9:
+                
                 break;
             case 0:
                 cout << "The program is over" << endl; break;
@@ -130,7 +147,7 @@ size_t utf8_length(const string& str) {
     return length;
 }
 
-// РџСЂРѕР±РµР»С‹
+// Пробелы
 void printAligned(const string& str, size_t width) {
     size_t len = utf8_length(str);
     cout << str;
@@ -141,15 +158,15 @@ void printAligned(const string& str, size_t width) {
 
 
 
-//Р’С‹РІРѕРґ С‚Р°Р±Р»РёС†С‹
+//Вывод таблицы
 void PrintTable(const vector<product>& products) {
     if (products.empty()) {
-        cout << "РќРµС‚ РґР°РЅРЅС‹С… РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ. РўР°Р±Р»РёС†Р° РїСѓСЃС‚Р°." << endl;
+        cout << "Нет данных для отображения. Таблица пуста." << endl;
         return;
     }
 
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
-    cout << "| в„– |     РљРѕРјРїР°РЅРёСЏ      |      РњР°СЃС‚РµСЂСЃРєР°СЏ     |   РќР°Р·РІР°РЅРёРµ РїСЂРѕРґСѓРєС‚Р°     | РљРѕР»-РІРѕ | Р”Р°С‚Р° РІС‹РїСѓСЃРєР°  |      Р Р°Р№РѕРЅ     | Р¤Р°РјРёР»РёСЏ РЅР°С‡Р°Р»СЊРЅРёРєР° |\n";
+    cout << "| № |     Компания      |       Цех           |   Название продукта     | Кол-во | Дата выпуска  |      Район     | Фамилия начальника |\n";
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
 
     for (const auto& prod : products) {
@@ -174,7 +191,7 @@ void PrintTable(const vector<product>& products) {
 }
 
 
-// Р’РІРѕРґ РґР°РЅРЅС‹С…
+// Ввод данных
 product Add(vector<product>& Product) {
     product product;
     
@@ -208,7 +225,7 @@ product Add(vector<product>& Product) {
     return product;
 }
 
-// РљСЂРёС‚РµСЂРёР№ СЃРѕРѕСЂС‚РёСЂРѕРІРєРё
+// Критерий соортировки
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion) {
     switch (criterion) {
         case BY_NUMBER:
@@ -236,16 +253,18 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
     }
 }
 
-// РћСЃРЅРѕРІРЅРѕРµ РјРµРЅСЋ
+// Основное меню
 void PrintMenu() {
-    cout << "1 - Add product" << endl;
-    cout << "2 - Show table" << endl;
-    cout << "3 - Sort" << endl;
-    cout << "4 - Edit chief surname" << endl;
-    cout << "5 - Delete data" << endl;
+    cout << "1 - Добавить компанию" << endl;
+    cout << "2 - Показать таблицу" << endl;
+    cout << "3 - Сортировка" << endl;
+    cout << "4 - Изменить фамилию начальника" << endl;
+    cout << "5 - Удалить данные" << endl;
+    cout << "6 - Считать данные с текстового файла" << endl;
+    cout << "7 - Вывести данные в текстовый файл" << endl;
 }
 
-//РњРµРЅСЋ СЃРѕСЂС‚РёСЂРѕРІРєРё
+//Меню сортировки
 void SortMenu() {
     cout << "1 - Sort by number" << endl;
     cout << "2 - Sort by company" << endl;
@@ -258,14 +277,14 @@ void SortMenu() {
     cout << "0 - Back" << endl;
 }
 
-// РњРµРЅСЋ РІРёРґР° СЃРѕСЂС‚РёСЂРѕРІРєРё
+// Меню вида сортировки
 void SortCriterionMenu() {
-    cout << "1 - Sort in ascending order" << endl;
-    cout << "2 - Sort in descending order" << endl;
-    cout << "0 - Back" << endl;
+    cout << "1 - Сортировка по возрастанию" << endl;
+    cout << "2 - Сортировка по убыванию" << endl;
+    cout << "0 - Назад" << endl;
 }
 
-//Р¤СѓРЅРєС†РёСЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
+//Функция сортировки
 void SortVector(vector<product>& products) {
     int sortCommand{};
     do {
@@ -309,7 +328,7 @@ void SortVector(vector<product>& products) {
     } while (sortCommand);
 }
 
-//Р’С‹Р±РѕСЂ РІРёРґР° СЃРѕСЂС‚РёСЂРѕРІРєРё
+//Выбор вида сортировки
 void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     int sortCriterionCommand;
     do {
@@ -332,7 +351,7 @@ void TypeOfSort(vector<product>& products, SortCriterion criterion) {
     } while (sortCriterionCommand);
 }
 
-//РџСЂРѕРІРµСЂРєР° СЃС‚СЂРѕРє
+//Проверка строк
 void GetCorrectName(string &name, string object) {
     bool isNotOk{};
     string temp;
@@ -380,7 +399,7 @@ int getCorrectInputNumber(int begin, int end){
     return n;
 }
 
-//Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ
+//Редактирование
 void Edit(vector<product>& products) {
     if(!products.empty()){
         string chiefSurname;
@@ -397,7 +416,7 @@ void Edit(vector<product>& products) {
     }
 }
 
-//РЈРґР°Р»РµРЅРёРµ
+//Удаление
 void Delete(vector<product>& products) {
     if (!products.empty()) {
         PrintTable(products);
@@ -415,4 +434,50 @@ void Delete(vector<product>& products) {
         cout << "There is no data in the table!" << endl;
         return;
     }
+}
+
+
+void readingDataFromTxt(vector<product>& products){
+    ifstream fin("text.txt");
+    if (!fin.is_open()) {
+        cout << "Не удалось открыть файл..." << endl;
+        return;
+    }
+
+    product prod;
+    while (fin >> prod.number >> prod.company >> prod.workshop >> prod.productName 
+           >> prod.productCount >> prod.date.day >> prod.date.month >> prod.date.year 
+           >> prod.districtOfCompany >> prod.chiefSurname) {
+                prod.number = products.size() + 1;
+                products.push_back(prod);
+    }
+
+    cout << "Данные успешно считаны." << endl;
+    fin.close();
+}
+
+
+//ВЫВОД ДАННЫХ В ТЕКСТОВЫЙ ФАЙЛ
+void addToTxt(vector<product>& products){
+    ofstream fout;
+    fout.open("text.txt");
+    if(fout.is_open()){
+        cout << "Файл открыт!";
+        for(const auto& prod : products){
+            fout << prod.company << " ";
+            fout << prod.workshop << " ";
+            fout << prod.productName << " ";
+            fout << prod.productCount << " ";
+            fout << prod.date.day << " ";
+            fout << prod.date.month << " ";
+            fout << prod.date.year << " ";
+            fout << prod.districtOfCompany << " ";
+            fout << prod.chiefSurname << " " << "\n";
+        }
+        cout << "\nДанные успешно записаны в файл.\n";
+    }
+    else{
+        cout << "Не удалось открыть файл...\n";
+    }
+    fout.close();
 }
