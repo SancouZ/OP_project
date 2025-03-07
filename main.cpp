@@ -51,9 +51,7 @@ int getCorrectInputNumber(int begin, int end);
 void Edit(vector<product>& products);
 void Delete(vector<product>& products);
 void readingDataFromTxt(vector<product>& products);
-void readingDataFromBin(vector<product>& products);
 void addToTxt(vector<product>& products);
-void addToBin(vector<product>& products);
 
 
 //МЕНЮ
@@ -91,15 +89,13 @@ int main() {
                 addToTxt(products);
                 break;
             case 8:
-                
                 break;
             case 9:
-                
                 break;
             case 0:
-                cout << "The program is over" << endl; break;
+                cout << "Программа завершена!" << endl; break;
             default:
-                cout << "Undefined command" << endl;
+                cout << "Неизвестная команда!" << endl;
         }
     } while (command);
     return 0;
@@ -117,8 +113,8 @@ int GetCorrectValue() {
         isNotOk = false;
         if ((cin >> n).fail()) {
             FixStreamState();
-            cout << "Undefined command" << endl;
-            cout << "Enter command again" << endl;
+            cout << "Неизвестная команда!" << endl;
+            cout << "Попробуйте снова!" << endl;
             isNotOk = true;
         }
     } while (isNotOk);
@@ -196,30 +192,30 @@ product Add(vector<product>& Product) {
     product product;
     
     cin.ignore();
-    GetCorrectName(product.company, "name of the enterprise");
+    GetCorrectName(product.company, "название компании");
     
 
-    GetCorrectName(product.workshop, "name of the workshop");
+    GetCorrectName(product.workshop, "название цеха");
     
 
-    GetCorrectName(product.productName, "name of the product");
+    GetCorrectName(product.productName, "название продукта");
     
-    cout << "Enter the number of units in the batch: ";
+    cout << "Введите колличество единиц в партии: ";
     product.productCount = GetCorrectValue();
     
-    cout << "Enter the day of product release: ";
+    cout << "Укажите день выпуска продукта: ";
     product.date.day = getCorrectInputNumber(1, 31);
     
-    cout << "Enter the month of product release: ";
+    cout << "Укажите месяц выпуска продукта: ";
     product.date.month = getCorrectInputNumber(1, 12);
 
-    cout << "Enter the year of product release: ";
+    cout << "Укажите год выпуска продукта ";
     product.date.year = getCorrectInputNumber(1970, 2025);
 
-    GetCorrectName(product.districtOfCompany, "district where the enterprise is located");
+    GetCorrectName(product.districtOfCompany, "район, в котором расположено предприятие");
     
 
-    GetCorrectName(product.chiefSurname, "surname of the workshop chief");
+    GetCorrectName(product.chiefSurname, "фамилию начальника цеха");
     
     product.number = Product.size() + 1;
     return product;
@@ -255,33 +251,40 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
 
 // Основное меню
 void PrintMenu() {
-    cout << "1 - Добавить компанию" << endl;
-    cout << "2 - Показать таблицу" << endl;
-    cout << "3 - Сортировка" << endl;
-    cout << "4 - Изменить фамилию начальника" << endl;
-    cout << "5 - Удалить данные" << endl;
-    cout << "6 - Считать данные с текстового файла" << endl;
-    cout << "7 - Вывести данные в текстовый файл" << endl;
+    cout << "===========================================" << endl;
+    cout << "| 1 - Добавить компанию                   |" << endl;
+    cout << "| 2 - Показать таблицу                    |" << endl;
+    cout << "| 3 - Сортировка                          |" << endl;
+    cout << "| 4 - Изменить фамилию начальника         |" << endl;
+    cout << "| 5 - Удалить данные                      |" << endl;
+    cout << "| 6 - Считать данные с текстового файла   |" << endl;
+    cout << "| 7 - Вывести данные в текстовый файл     |" << endl;
+    cout << "| 0 - Выход                               |" << endl;
+    cout << "===========================================" << endl;
 }
 
 //Меню сортировки
 void SortMenu() {
-    cout << "1 - Sort by number" << endl;
-    cout << "2 - Sort by company" << endl;
-    cout << "3 - Sort by worshop" << endl;
-    cout << "4 - Sort by product name" << endl;
-    cout << "5 - Sort by product count" << endl;
-    cout << "6 - Sort by date" << endl;
-    cout << "7 - Sort by district" << endl;
-    cout << "8 - Sort by chief surname" << endl;
-    cout << "0 - Back" << endl;
+    cout << "===========================================" << endl;
+    cout << "| 1 - Сортировка по номеру                |" << endl;
+    cout << "| 2 - Сортировка по названию компании     |" << endl;
+    cout << "| 3 - Сортировка по названию цеха         |" << endl;
+    cout << "| 4 - Сортировка по названию продукции    |" << endl;
+    cout << "| 5 - Сортировка по колличеству продукции |" << endl;
+    cout << "| 6 - Сортировка по дате                  |" << endl;
+    cout << "| 7 - Сортировка по району                |" << endl;
+    cout << "| 8 - Сортировка по фамилии начальника    |" << endl;
+    cout << "| 0 - Назад                               |" << endl;
+    cout << "===========================================" << endl;
 }
 
 // Меню вида сортировки
 void SortCriterionMenu() {
-    cout << "1 - Сортировка по возрастанию" << endl;
-    cout << "2 - Сортировка по убыванию" << endl;
-    cout << "0 - Назад" << endl;
+    cout << "===========================================" << endl;
+    cout << "| 1 - Сортировка по возрастанию           |" << endl;
+    cout << "| 2 - Сортировка по убыванию              |" << endl;
+    cout << "| 0 - Назад                               |" << endl;
+    cout << "===========================================" << endl;
 }
 
 //Функция сортировки
@@ -320,11 +323,11 @@ void SortVector(vector<product>& products) {
             case 0:
                 return;
             default:
-                cout << "Undefined command, it must be 1, 2, 3, 4, 5, 6, 7 or 8, try again!" << endl;
+                cout << "Неизвестная команда, выберите пункт меню 1-8. Повторите попытку!" << endl;
         }
 
         TypeOfSort(products, criterion);
-        cout << "Sort complete!" << endl;
+        cout << "Сортировка успешно завершена!" << endl;
     } while (sortCommand);
 }
 
@@ -346,7 +349,7 @@ void TypeOfSort(vector<product>& products, SortCriterion criterion) {
                 });
                 return ;
             default:
-                cout << "Undefined command, it must be 1 or 2, try again!" << endl;
+                cout << "Неизвестная команда, выберите пункт 1 или 2. Повторите попытку!" << endl;
         }
     } while (sortCriterionCommand);
 }
@@ -358,11 +361,11 @@ void GetCorrectName(string &name, string object) {
 
     do {
         isNotOk = false;
-        cout << "Enter the " << object << ": ";
+        cout << "Введите " << object << ": ";
         cin >> temp;
 
         if (temp.length() > 20) {
-            cout << "The name must be at most 20 characters long!" << endl;
+            cout << "Длина имени должна составлять не более 20 символов!" << endl;
             isNotOk = true;
             continue;
         }
@@ -370,7 +373,7 @@ void GetCorrectName(string &name, string object) {
         for (int i = 0; temp[i] != '\0'; i++) {
             if ((temp[i] >= ' ' && temp[i] <= '@') || (temp[i] >= '[' && temp[i] < 'a') || 
                 (temp[i] >= '{' && temp[i] <= '~')){
-                cout << "The name must contain only letters!" << endl;
+                cout << "Имя должно содержать только буквы!" << endl;
                 isNotOk = true;
                 break;
             }
@@ -389,8 +392,8 @@ int getCorrectInputNumber(int begin, int end){
         isNotOk = false;
         if(((cin >> n).fail()) || (n < begin || n > end)){
             FixStreamState();
-            cout << "Incorrect input! The number must be between " << begin << " and " << end << "!"<< endl;
-            cout << "Try again!" << endl;
+            cout << "Некорректный ввод! Число должно быть между " << begin << " и " << end << "!"<< endl;
+            cout << "Попробуйте снова!" << endl;
             isNotOk = true;  
         }
     }
@@ -404,14 +407,14 @@ void Edit(vector<product>& products) {
     if(!products.empty()){
         string chiefSurname;
         PrintTable(products);
-        cout << "Enter the number to edit (1 to " << products.size() << "): " << endl;
+        cout << "Введите номер для редактирования (от 1 до " << products.size() << "): " << endl;
         int numberToEdit = getCorrectInputNumber(1, products.size());
-        GetCorrectName(products[numberToEdit - 1].chiefSurname, "Enter the new chief surname");
-        cout << "The data has been updated successfully" << endl;
+        GetCorrectName(products[numberToEdit - 1].chiefSurname, "Введите новую фамилию начальника: ");
+        cout << "Данные были успешно обновлены!" << endl;
         return ;
     }
     else {
-        cout << "There is no data in the table!" << endl;
+        cout << "В таблице нет данных!" << endl;
         return ;
     }
 }
@@ -427,11 +430,11 @@ void Delete(vector<product>& products) {
         for (int i = numberToDelete - 1; i < products.size(); i++) {
             products[i].number -= 1; 
         }
-        cout << "Data has been successfully deleted" << endl;
+        cout << "Данные были успешно удалены!" << endl;
         return;
 
     } else {
-        cout << "There is no data in the table!" << endl;
+        cout << "В таблице нет данных!" << endl;
         return;
     }
 }
