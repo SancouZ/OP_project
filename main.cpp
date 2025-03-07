@@ -46,6 +46,7 @@ void FixStreamState();
 bool SortByCriterion(const product &a, const product &b, SortCriterion criterion);
 void SortVector(vector<product>& products);
 void TypeOfSort(vector<product>& products, SortCriterion criterion);
+void txtVector(vector<product>& products);
 void GetCorrectName(string &name, string object);
 int getCorrectInputNumber(int begin, int end);
 void Edit(vector<product>& products);
@@ -58,6 +59,7 @@ void addToTxt(vector<product>& products);
 void PrintMenu();
 void SortMenu();
 void SortCriterionMenu();
+void TxtMenu();
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -83,17 +85,11 @@ int main() {
                 Delete(products);
                 break;
             case 6:
-                readingDataFromTxt(products);
-                break;
-            case 7:
-                addToTxt(products);
-                break;
-            case 8:
-                break;
-            case 9:
+                txtVector(products);
                 break;
             case 0:
-                cout << "Программа завершена!" << endl; break;
+                cout << "Программа завершена!" << endl; 
+                break;
             default:
                 cout << "Неизвестная команда!" << endl;
         }
@@ -257,8 +253,7 @@ void PrintMenu() {
     cout << "| 3 - Сортировка                          |" << endl;
     cout << "| 4 - Изменить фамилию начальника         |" << endl;
     cout << "| 5 - Удалить данные                      |" << endl;
-    cout << "| 6 - Считать данные с текстового файла   |" << endl;
-    cout << "| 7 - Вывести данные в текстовый файл     |" << endl;
+    cout << "| 6 - Работа с текстовыми файлами         |" << endl;
     cout << "| 0 - Выход                               |" << endl;
     cout << "===========================================" << endl;
 }
@@ -286,6 +281,16 @@ void SortCriterionMenu() {
     cout << "| 0 - Назад                               |" << endl;
     cout << "===========================================" << endl;
 }
+
+
+void TxtMenu() {
+    cout << "===========================================" << endl;
+    cout << "| 1 - Считать данные с текстового файла   |" << endl;
+    cout << "| 2 - Вывести данные в текстовый файл     |" << endl;
+    cout << "| 0 - Назад                               |" << endl;
+    cout << "===========================================" << endl;
+}
+
 
 //Функция сортировки
 void SortVector(vector<product>& products) {
@@ -483,4 +488,26 @@ void addToTxt(vector<product>& products){
         cout << "Не удалось открыть файл...\n";
     }
     fout.close();
+}
+
+
+void txtVector(vector<product>& products) {
+    int txtCommand{};
+    do {
+        TxtMenu();
+        txtCommand = GetCorrectValue();
+
+        switch (txtCommand) {
+            case 1:
+                readingDataFromTxt(products);
+                break;
+            case 2:
+                addToTxt(products);
+                break;
+            case 0:
+                return;
+            default:
+                cout << "Неизвестная команда, выберите пункт меню 1-2. Повторите попытку!" << endl;
+        }
+    } while (txtCommand);
 }
