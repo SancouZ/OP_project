@@ -53,6 +53,7 @@ void Edit(vector<product>& products);
 void Delete(vector<product>& products);
 void readingDataFromTxt(vector<product>& products);
 void addToTxt(vector<product>& products);
+void businessesInTheArea(const vector<product>& products);
 
 
 //МЕНЮ
@@ -86,6 +87,9 @@ int main() {
                 break;
             case 6:
                 txtVector(products);
+                break;
+            case 7:
+                businessesInTheArea(products);
                 break;
             case 0:
                 cout << "Программа завершена!" << endl; 
@@ -254,6 +258,7 @@ void PrintMenu() {
     cout << "| 4 - Изменить фамилию начальника         |" << endl;
     cout << "| 5 - Удалить данные                      |" << endl;
     cout << "| 6 - Работа с текстовыми файлами         |" << endl;
+    cout << "| 7 - Количество предприятий в районе     |" << endl;
     cout << "| 0 - Выход                               |" << endl;
     cout << "===========================================" << endl;
 }
@@ -453,7 +458,7 @@ void readingDataFromTxt(vector<product>& products){
     }
 
     product prod;
-    while (fin >> prod.number >> prod.company >> prod.workshop >> prod.productName 
+    while (fin >> prod.company >> prod.workshop >> prod.productName 
            >> prod.productCount >> prod.date.day >> prod.date.month >> prod.date.year 
            >> prod.districtOfCompany >> prod.chiefSurname) {
                 prod.number = products.size() + 1;
@@ -510,4 +515,22 @@ void txtVector(vector<product>& products) {
                 cout << "Неизвестная команда, выберите пункт меню 1-2. Повторите попытку!" << endl;
         }
     } while (txtCommand);
+}
+
+
+void businessesInTheArea(const vector<product>& products){
+    int count = 0;
+    string Area;
+    
+    cout << "Введите название района:";
+    cin >> Area;
+
+    for(const auto& prod : products){
+        if(Area == prod.districtOfCompany){
+            count = count + 1;
+            cout << prod.company << endl;
+        }
+    }
+
+    cout << "\nВ данном районе расположено " << count << " компании(ий).\n\n";
 }
