@@ -58,6 +58,7 @@ void addToTxt(vector<product>& products);
 void businessesInTheArea(const vector<product>& products);
 void theCommonSurname(const vector<product>& products);
 void listOfWorkshops(const vector<product>& products);
+void companyProducingProducts(const vector<product>& products);
 void Requests(vector<product>& products);
 
 //МЕНЮ
@@ -168,7 +169,7 @@ void PrintTable(const vector<product>& products) {
     }
 
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
-    cout << "| № |     Компания      |       Цех           |   Название продукта     | Кол-во | Дата выпуска  |      Район     | Фамилия начальника |\n";
+    cout << "| № |    Предпритие     |       Цех           |   Название продукта     | Кол-во | Дата выпуска  |      Район     | Фамилия начальника |\n";
     cout << "----------------------------------------------------------------------------------------------------------------------------------------\n";
 
     for (const auto& prod : products) {
@@ -198,7 +199,7 @@ product Add(vector<product>& Product) {
     product product;
     
     cin.ignore();
-    GetCorrectName(product.company, "название компании");
+    GetCorrectName(product.company, "название предприятия");
     
 
     GetCorrectName(product.workshop, "название цеха");
@@ -257,59 +258,60 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
 
 // Основное меню
 void PrintMenu() {
-    cout << "================================================" << endl;
-    cout << "| 1 - Добавить компанию                        |" << endl;
-    cout << "| 2 - Показать таблицу                         |" << endl;
-    cout << "| 3 - Сортировка                               |" << endl;
-    cout << "| 4 - Изменить фамилию начальника              |" << endl;
-    cout << "| 5 - Удалить данные                           |" << endl;
-    cout << "| 6 - Работа с текстовыми файлами              |" << endl;
-    cout << "| 7 - Дополнительный функционал                |" << endl;
-    cout << "| 0 - Выход                                    |" << endl;
-    cout << "================================================" << endl;
+    cout << "======================================================" << endl;
+    cout << "| 1 - Добавить предприятие                           |" << endl;
+    cout << "| 2 - Показать таблицу                               |" << endl;
+    cout << "| 3 - Сортировка                                     |" << endl;
+    cout << "| 4 - Изменить фамилию начальника                    |" << endl;
+    cout << "| 5 - Удалить данные                                 |" << endl;
+    cout << "| 6 - Работа с текстовыми файлами                    |" << endl;
+    cout << "| 7 - Дополнительный функционал                      |" << endl;
+    cout << "| 0 - Выход                                          |" << endl;
+    cout << "======================================================" << endl;
 }
 
 //Меню сортировки
 void SortMenu() {
-    cout << "================================================" << endl;
-    cout << "| 1 - Сортировка по номеру                     |" << endl;
-    cout << "| 2 - Сортировка по названию компании          |" << endl;
-    cout << "| 3 - Сортировка по названию цеха              |" << endl;
-    cout << "| 4 - Сортировка по названию продукции         |" << endl;
-    cout << "| 5 - Сортировка по колличеству продукции      |" << endl;
-    cout << "| 6 - Сортировка по дате                       |" << endl;
-    cout << "| 7 - Сортировка по району                     |" << endl;
-    cout << "| 8 - Сортировка по фамилии начальника         |" << endl;
-    cout << "| 0 - Назад                                    |" << endl;
-    cout << "================================================" << endl;
+    cout << "======================================================" << endl;
+    cout << "| 1 - Сортировка по номеру                           |" << endl;
+    cout << "| 2 - Сортировка по названию предприятия             |" << endl;
+    cout << "| 3 - Сортировка по названию цеха                    |" << endl;
+    cout << "| 4 - Сортировка по названию продукции               |" << endl;
+    cout << "| 5 - Сортировка по колличеству продукции            |" << endl;
+    cout << "| 6 - Сортировка по дате                             |" << endl;
+    cout << "| 7 - Сортировка по району                           |" << endl;
+    cout << "| 8 - Сортировка по фамилии начальника               |" << endl;
+    cout << "| 0 - Назад                                          |" << endl;
+    cout << "======================================================" << endl;
 }
 
 // Меню вида сортировки
 void SortCriterionMenu() {
-    cout << "================================================" << endl;
-    cout << "| 1 - Сортировка по возрастанию                |" << endl;
-    cout << "| 2 - Сортировка по убыванию                   |" << endl;
-    cout << "| 0 - Назад                                    |" << endl;
-    cout << "================================================" << endl;
+    cout << "======================================================" << endl;
+    cout << "| 1 - Сортировка по возрастанию                      |" << endl;
+    cout << "| 2 - Сортировка по убыванию                         |" << endl;
+    cout << "| 0 - Назад                                          |" << endl;
+    cout << "======================================================" << endl;
 }
 
 
 void TxtMenu() {
-    cout << "================================================" << endl;
-    cout << "| 1 - Считать данные с текстового файла        |" << endl;
-    cout << "| 2 - Вывести данные в текстовый файл          |" << endl;
-    cout << "| 0 - Назад                                    |" << endl;
-    cout << "================================================" << endl;
+    cout << "======================================================" << endl;
+    cout << "| 1 - Считать данные с текстового файла              |" << endl;
+    cout << "| 2 - Вывести данные в текстовый файл                |" << endl;
+    cout << "| 0 - Назад                                          |" << endl;
+    cout << "======================================================" << endl;
 }
 
 
 void RequestsMenu() {
-    cout << "================================================" << endl;
-    cout << "| 1 - Колличество предприятий в районе         |" << endl;
-    cout << "| 2 - Самая распространённая фамилия начальника|" << endl;
-    cout << "| 3 - Получить список цехов предприятия        |" << endl;
-    cout << "| 0 - Назад                                    |" << endl;
-    cout << "================================================" << endl;
+    cout << "======================================================" << endl;
+    cout << "| 1 - Колличество предприятий в районе               |" << endl;
+    cout << "| 2 - Самая распространённая фамилия начальника      |" << endl;
+    cout << "| 3 - Cписок цехов предприятия                       |" << endl;
+    cout << "| 4 - Предприятия выпускающие одинаковую продукцию   |" << endl;
+    cout << "| 0 - Назад                                          |" << endl;
+    cout << "======================================================" << endl;
 }
 
 
@@ -548,8 +550,8 @@ void businessesInTheArea(const vector<product>& products){
     }
 
     if(count != 0){
-        cout << "\nВ данном районе расположено " << count << " компании(-ий).";
-        cout << "\nНазвание компании(-ий) расположенной(-ых) в данном районе:\n";
+        cout << "\nВ данном районе расположено " << count << " предприятия(-ий).";
+        cout << "\nНазвание предприятия(-ий) расположенной(-ых) в данном районе:\n";
     }
     else{
         cout << "\nТакого района нет в базе данных!\n\n";
@@ -595,7 +597,7 @@ void listOfWorkshops(const vector<product>& products){
     int count = 0;
     string Company;
     
-    cout << "\nВведите название компании: ";
+    cout << "\nВведите название предприятия: ";
     cin >> Company;
 
     for(const auto& prod : products){
@@ -605,7 +607,7 @@ void listOfWorkshops(const vector<product>& products){
     }
 
     if(count != 0){
-        cout << "\nУ компании <" << Company << "> имеется " << count << " цеха(-ов)\n";
+        cout << "\nУ предприятия <" << Company << "> имеется " << count << " цеха(-ов)\n";
         cout << "\nСписок цехов:\n";
     }
     else{
@@ -621,6 +623,39 @@ void listOfWorkshops(const vector<product>& products){
     cout << "\n";
 }
 
+
+void companyProducingProducts(const vector<product>& products){
+    int companyCount = 0;
+    string product;
+
+    cout << "Введите название продукции: ";
+    cin >> product;
+
+    for(const auto& prod : products){
+        if(product == prod.productName){
+            companyCount++;
+        }
+    }
+
+    if(companyCount == 0){
+        cout << "\nНет данных о выпуске данной продукции!\n\n";
+        return;
+    }
+    else if(companyCount == 1){
+        cout << "\n" << companyCount << " предприятие выпускает данную продукцию\n\n";
+    }
+    else{
+        cout << "\n" << companyCount << " предприятия(-ий) выпускают(-ет) данную продукцию\n\n";
+    }
+
+    cout << "Предприятия(-ие) выпускающие(-ие) данную продукцию: \n";
+
+    for(const auto& prod : products){
+        if(product == prod.productName){
+            cout << "   " << prod.company << "\n";
+        }
+    }
+}
 
 
 void Requests(vector<product>& products) {
@@ -638,6 +673,9 @@ void Requests(vector<product>& products) {
                 break;
             case 3:
                 listOfWorkshops(products);
+                break;
+            case 4:
+                companyProducingProducts(products);
                 break;
             case 0:
                 return;
