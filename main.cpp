@@ -6,6 +6,7 @@
 #include <limits>
 #include <algorithm>
 #include <locale>
+#include <unordered_map>
 
 using namespace std;
 
@@ -53,7 +54,10 @@ void Edit(vector<product>& products);
 void Delete(vector<product>& products);
 void readingDataFromTxt(vector<product>& products);
 void addToTxt(vector<product>& products);
+//Дополнительные запросы
+void Requests(vector<product>& products);
 void businessesInTheArea(const vector<product>& products);
+void theCommonSurname(const vector<product>& products);
 
 
 //МЕНЮ
@@ -61,6 +65,8 @@ void PrintMenu();
 void SortMenu();
 void SortCriterionMenu();
 void TxtMenu();
+void RequestsMenu();
+
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -89,7 +95,7 @@ int main() {
                 txtVector(products);
                 break;
             case 7:
-                businessesInTheArea(products);
+                Requests(products);
                 break;
             case 0:
                 cout << "Программа завершена!" << endl; 
@@ -251,49 +257,58 @@ bool SortByCriterion(const product &a, const product &b, SortCriterion criterion
 
 // Основное меню
 void PrintMenu() {
-    cout << "===========================================" << endl;
-    cout << "| 1 - Добавить компанию                   |" << endl;
-    cout << "| 2 - Показать таблицу                    |" << endl;
-    cout << "| 3 - Сортировка                          |" << endl;
-    cout << "| 4 - Изменить фамилию начальника         |" << endl;
-    cout << "| 5 - Удалить данные                      |" << endl;
-    cout << "| 6 - Работа с текстовыми файлами         |" << endl;
-    cout << "| 7 - Количество предприятий в районе     |" << endl;
-    cout << "| 0 - Выход                               |" << endl;
-    cout << "===========================================" << endl;
+    cout << "================================================" << endl;
+    cout << "| 1 - Добавить компанию                        |" << endl;
+    cout << "| 2 - Показать таблицу                         |" << endl;
+    cout << "| 3 - Сортировка                               |" << endl;
+    cout << "| 4 - Изменить фамилию начальника              |" << endl;
+    cout << "| 5 - Удалить данные                           |" << endl;
+    cout << "| 6 - Работа с текстовыми файлами              |" << endl;
+    cout << "| 7 - Дополнительный функционал                |" << endl;
+    cout << "| 0 - Выход                                    |" << endl;
+    cout << "================================================" << endl;
 }
 
 //Меню сортировки
 void SortMenu() {
-    cout << "===========================================" << endl;
-    cout << "| 1 - Сортировка по номеру                |" << endl;
-    cout << "| 2 - Сортировка по названию компании     |" << endl;
-    cout << "| 3 - Сортировка по названию цеха         |" << endl;
-    cout << "| 4 - Сортировка по названию продукции    |" << endl;
-    cout << "| 5 - Сортировка по колличеству продукции |" << endl;
-    cout << "| 6 - Сортировка по дате                  |" << endl;
-    cout << "| 7 - Сортировка по району                |" << endl;
-    cout << "| 8 - Сортировка по фамилии начальника    |" << endl;
-    cout << "| 0 - Назад                               |" << endl;
-    cout << "===========================================" << endl;
+    cout << "================================================" << endl;
+    cout << "| 1 - Сортировка по номеру                     |" << endl;
+    cout << "| 2 - Сортировка по названию компании          |" << endl;
+    cout << "| 3 - Сортировка по названию цеха              |" << endl;
+    cout << "| 4 - Сортировка по названию продукции         |" << endl;
+    cout << "| 5 - Сортировка по колличеству продукции      |" << endl;
+    cout << "| 6 - Сортировка по дате                       |" << endl;
+    cout << "| 7 - Сортировка по району                     |" << endl;
+    cout << "| 8 - Сортировка по фамилии начальника         |" << endl;
+    cout << "| 0 - Назад                                    |" << endl;
+    cout << "================================================" << endl;
 }
 
 // Меню вида сортировки
 void SortCriterionMenu() {
-    cout << "===========================================" << endl;
-    cout << "| 1 - Сортировка по возрастанию           |" << endl;
-    cout << "| 2 - Сортировка по убыванию              |" << endl;
-    cout << "| 0 - Назад                               |" << endl;
-    cout << "===========================================" << endl;
+    cout << "================================================" << endl;
+    cout << "| 1 - Сортировка по возрастанию                |" << endl;
+    cout << "| 2 - Сортировка по убыванию                   |" << endl;
+    cout << "| 0 - Назад                                    |" << endl;
+    cout << "================================================" << endl;
 }
 
 
 void TxtMenu() {
-    cout << "===========================================" << endl;
-    cout << "| 1 - Считать данные с текстового файла   |" << endl;
-    cout << "| 2 - Вывести данные в текстовый файл     |" << endl;
-    cout << "| 0 - Назад                               |" << endl;
-    cout << "===========================================" << endl;
+    cout << "================================================" << endl;
+    cout << "| 1 - Считать данные с текстового файла        |" << endl;
+    cout << "| 2 - Вывести данные в текстовый файл          |" << endl;
+    cout << "| 0 - Назад                                    |" << endl;
+    cout << "================================================" << endl;
+}
+
+
+void RequestsMenu() {
+    cout << "================================================" << endl;
+    cout << "| 1 - Колличество предприятий в районе         |" << endl;
+    cout << "| 2 - Самая распространённая фамилия начальника|" << endl;
+    cout << "| 0 - Назад                                    |" << endl;
+    cout << "================================================" << endl;
 }
 
 
@@ -497,12 +512,12 @@ void addToTxt(vector<product>& products){
 
 
 void txtVector(vector<product>& products) {
-    int txtCommand{};
+    int requestsCommand{};
     do {
         TxtMenu();
-        txtCommand = GetCorrectValue();
+        requestsCommand = GetCorrectValue();
 
-        switch (txtCommand) {
+        switch (requestsCommand) {
             case 1:
                 readingDataFromTxt(products);
                 break;
@@ -514,7 +529,7 @@ void txtVector(vector<product>& products) {
             default:
                 cout << "Неизвестная команда, выберите пункт меню 1-2. Повторите попытку!" << endl;
         }
-    } while (txtCommand);
+    } while (requestsCommand);
 }
 
 
@@ -522,15 +537,77 @@ void businessesInTheArea(const vector<product>& products){
     int count = 0;
     string Area;
     
-    cout << "Введите название района:";
+    cout << "\nВведите название района:";
     cin >> Area;
 
     for(const auto& prod : products){
         if(Area == prod.districtOfCompany){
             count = count + 1;
-            cout << prod.company << endl;
         }
     }
 
-    cout << "\nВ данном районе расположено " << count << " компании(ий).\n\n";
+    if(count != 0){
+        cout << "\nВ данном районе расположено " << count << " компании(-ий).";
+        cout << "\nНазвание компании(-ий) расположенной(-ых) в данном районе:\n";
+    }
+    else{
+        cout << "\nТакого района нет в базе данных!\n\n";
+        return;
+    }
+
+    for(const auto& prod : products){
+        if(Area == prod.districtOfCompany){
+            cout <<  prod.company << endl;
+        }
+    }
+
+}
+
+
+void theCommonSurname(const vector<product>& products){
+    unordered_map<string, int> surnameCount;
+    string mostCommonSurname;
+    int count = 0;
+
+    for(const auto& prod : products){
+        surnameCount[prod.chiefSurname]++;
+    }
+
+    for (const auto& prod : surnameCount) {
+        if (prod.second > count){
+            count = prod.second;
+            mostCommonSurname = prod.first;
+        }
+    }
+
+    if(count > 1){
+        cout << "\nНаиболее распространённая фамилия начальника цеха: \n" << mostCommonSurname << " (встречается " << count << " раз(а) )\n\n";
+    }
+    else{
+        cout << "\nСовпадений не найдено!\n\n";
+    }
+
+}
+
+
+
+void Requests(vector<product>& products) {
+    int requestsCommand{};
+    do {
+        RequestsMenu();
+        requestsCommand = GetCorrectValue();
+
+        switch (requestsCommand) {
+            case 1:
+                businessesInTheArea(products);
+                break;
+            case 2:
+                theCommonSurname(products);
+                break;
+            case 0:
+                return;
+            default:
+                cout << "Неизвестная команда, выберите пункт меню 1-2. Повторите попытку!" << endl;
+        }
+    } while (requestsCommand);
 }
