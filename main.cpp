@@ -55,10 +55,10 @@ void Delete(vector<product>& products);
 void readingDataFromTxt(vector<product>& products);
 void addToTxt(vector<product>& products);
 //Дополнительные запросы
-void Requests(vector<product>& products);
 void businessesInTheArea(const vector<product>& products);
 void theCommonSurname(const vector<product>& products);
-
+void listOfWorkshops(const vector<product>& products);
+void Requests(vector<product>& products);
 
 //МЕНЮ
 void PrintMenu();
@@ -307,6 +307,7 @@ void RequestsMenu() {
     cout << "================================================" << endl;
     cout << "| 1 - Колличество предприятий в районе         |" << endl;
     cout << "| 2 - Самая распространённая фамилия начальника|" << endl;
+    cout << "| 3 - Получить список цехов предприятия        |" << endl;
     cout << "| 0 - Назад                                    |" << endl;
     cout << "================================================" << endl;
 }
@@ -590,6 +591,37 @@ void theCommonSurname(const vector<product>& products){
 }
 
 
+void listOfWorkshops(const vector<product>& products){
+    int count = 0;
+    string Company;
+    
+    cout << "\nВведите название компании: ";
+    cin >> Company;
+
+    for(const auto& prod : products){
+        if(Company == prod.company){
+            count++;
+        }
+    }
+
+    if(count != 0){
+        cout << "\nУ компании <" << Company << "> имеется " << count << " цеха(-ов)\n";
+        cout << "\nСписок цехов:\n";
+    }
+    else{
+        cout << "\nОтсутствуют данные!\n\n";
+        return;
+    }
+
+    for(const auto& prod : products){
+        if(Company == prod.company){
+            cout  << "   "<< prod.workshop << endl;
+        }
+    }
+    cout << "\n";
+}
+
+
 
 void Requests(vector<product>& products) {
     int requestsCommand{};
@@ -603,6 +635,9 @@ void Requests(vector<product>& products) {
                 break;
             case 2:
                 theCommonSurname(products);
+                break;
+            case 3:
+                listOfWorkshops(products);
                 break;
             case 0:
                 return;
